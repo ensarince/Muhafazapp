@@ -38,7 +38,7 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
         const [contact, setContact] = useState<HTMLInputElement | null | string>(null)
         const [selectedFile, setSelectedFile] = useState(null)
         const [loading, setLoading] = useState(false)
-        const filePickerRef = useRef(null)
+        const filePickerRef = useRef<HTMLInputElement>(null)
     
         //change function for category showing
         const handleChange = (event: SelectChangeEvent) => {
@@ -54,10 +54,8 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
             if(e.target.files[0]!){
                 reader.readAsDataURL(e.target.files[0]!)
             }
-            reader.onload = (readerEvent) => {
-
+            reader.onload = (readerEvent: any) => {
                 setSelectedFile(readerEvent.target.result)
-
             }
         }
     

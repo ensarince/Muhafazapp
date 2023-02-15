@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, LegacyRef, useRef, useState } from 'react'
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import { Textarea } from '@mui/joy'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
@@ -38,7 +38,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
     const [contact, setContact] = useState<HTMLInputElement | null | string>(null)
     const [selectedFile, setSelectedFile] = useState(null)
     const [loading, setLoading] = useState(false)
-    const filePickerRef = useRef(null)
+    const filePickerRef = useRef<HTMLInputElement>(null)
 
     //change function for category showing
     const handleChange = (event: SelectChangeEvent) => {
@@ -137,7 +137,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                                     <img src={selectedFile} style={{width:"12.5em"}} onClick={() => setSelectedFile} alt="" />
                             </div> 
                         ) : (
-                            <div onClick={() => filePickerRef.current?.click()} style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", cursor:"pointer"}}>
+                            <div onClick={() =>filePickerRef.current?.click()} style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", cursor:"pointer"}}>
                             <Typography id="modal-modal-title" variant="body1" component="h5">
                                 Resim ekle
                             </Typography>
