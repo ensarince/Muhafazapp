@@ -1,4 +1,4 @@
-import { Button, Grid, Pagination } from '@mui/material';
+import { Button, Grid, Pagination, Typography } from '@mui/material';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import CardComponent from '../components/CardComponent';
@@ -61,11 +61,14 @@ return (
         {lostPage ? 
         (
             <>
-        <div style={{display:"flex", gap:"1em"}}>
-            <Button sx={{fontSize:"1.1em"}} variant="contained" color='inherit' onClick={() => setlostPage(false)}>Bulunanlar</Button>
+            <Button sx={{fontSize:"1.1em"}} variant="contained" color='primary' onClick={() => setlostPage(false)}>Bulunanlar</Button>
+
+        <div style={{display:"flex", gap:"1em", alignItems:"center"}}>
+            <Typography id="transition-modal-title" sx={{color:"white", textTransform:"uppercase"}} variant="h5" component="h2">Aranan Esyalar</Typography>
             
-            <Button variant='contained' color='secondary'  sx={{fontSize:"1.3em"}} onClick={handleOpenLost}>+</Button>
+            <Button variant='contained' color='inherit'  sx={{fontSize:"1.3em"}} onClick={handleOpenLost}>+</Button>
         </div>
+
 
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg:16, xl: 20 }}>
         {handleSearchLost().map((item, index) => (
@@ -90,11 +93,14 @@ return (
             </>
         ) : (
             <>
-            <div style={{display:"flex", gap:"1em"}}>
-                <Button sx={{fontSize:"1.1em"}} variant='contained' color='inherit' onClick={() => setlostPage(true)}>Arananlar</Button>
+            <Button sx={{fontSize:"1.1em"}} variant='contained' color='secondary' onClick={() => setlostPage(true)}>Arananlar</Button>
+            
+            <div style={{display:"flex", gap:"1em", alignItems:"center"}}>
+                <Typography id="transition-modal-title" sx={{color:"white", textTransform:"uppercase"}} variant="h5">Bulunan Esyalar</Typography>
 
-                <Button variant='contained' sx={{fontSize:"1.3em"}} color='primary' onClick={handleOpenFound}>+</Button>
+                <Button variant='contained' sx={{fontSize:"1.3em"}} color='inherit' onClick={handleOpenFound}>+</Button>
             </div>
+
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg: 16, xl:20 }}>
             {handleSearchFound().slice((page - 1) * 10, (page - 1) * 10 + 10)?.map((item, index) => (
                 <Grid item xs={2} sm={4} md={4} key={index}>
