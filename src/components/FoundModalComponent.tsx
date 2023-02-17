@@ -79,6 +79,7 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
                 contact: contact,
                 location: location,
                 description: description,
+                isFound: true,
                 timestamp: serverTimestamp(),
             })
     
@@ -149,7 +150,7 @@ return (
                     )
                 }
             </div>
-            <Button onClick={uploadPost} disabled={loading} variant='contained' color='primary'>Gönder</Button>
+            <Button onClick={uploadPost} disabled={loading && !category || !esya || !location || !contact || !description || !selectedFile} variant='contained' color='primary'>Gönder</Button>
         </Box>
     </Modal>
 </div>

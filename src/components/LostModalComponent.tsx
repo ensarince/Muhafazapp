@@ -80,6 +80,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
             contact: contact,
             location: location,
             description: description,
+            isMissing: true,
             timestamp: serverTimestamp(),
         })
 

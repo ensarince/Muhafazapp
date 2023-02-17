@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { alpha, Backdrop, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, createTheme, Fade, Modal, styled, Typography } from '@mui/material'
 import { Esya } from '../types';
 import { useSelector } from 'react-redux';
@@ -40,11 +40,18 @@ export default function CardComponent({item}: Props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector(selectUser);
+  const [collection, setCollection] = useState("")
+
+  useEffect(() => {
+    item.isMissing ? setCollection("lostItems") : setCollection("foundItems")
+  }, [])
   
+  //there are two collections, reach the right one from the item isMissing, isFound values
+
   //delete post func
   const handleDelete = async() => {
     try{
-      await deleteDoc(doc(db, "lostItems" || "foundItems", item.id))
+      await deleteDoc(doc(db, collection, item.id))
           .then(()=>{
             alert("successfully deleted! ")
           })
