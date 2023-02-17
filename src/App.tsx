@@ -2,11 +2,18 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { collection, DocumentData, onSnapshot, orderBy, query, QuerySnapshot } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
-import { db } from './firebase';
+import { auth, db } from './firebase';
 import HomePage from './pages/HomePage';
 import { Esya } from './types';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, logout, selectUser } from './features/userSlice';
+import LoginPage from "./pages/LoginPage"
+import SignupPage from './pages/SignupPage';
 
 function App() {
+
+      const user = useSelector(selectUser);
+      const dispatch = useDispatch();
 
       //data storing & managing
       const [lostItems, setLostItems] = useState<Esya[]>([])
@@ -25,6 +32,26 @@ function App() {
         return unsubscribe
     }, [db])   
 
+    useEffect(() => {
+      //!check if logged in or not with onAuthStateChanged, and clean it after(the listener)
+      const unsubscribe = auth.onAuthStateChanged(userAuth => {
+        if(userAuth){
+          console.log(userAuth)
+          //logged in
+          dispatch(login({
+            uid: userAuth.uid,
+            email: userAuth.email,
+          }))
+          //!set localstorage
+          window.localStorage.setItem("user", userAuth.uid)
+        }else{
+          //logged eout
+          dispatch(logout())
+        }
+      })
+      return unsubscribe;
+    }, [dispatch])
+
         //getting found item data
         useEffect(() => {
             const unsubscribe = onSnapshot(query(collection(db, 'foundItems'), orderBy('timestamp', 'desc')), 
@@ -41,7 +68,9 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<HomePage lostItems={lostItems} foundItems={foundItems}/>} />
+      <Route path="/" element={!user ? <LoginPage /> : <HomePage lostItems={lostItems} foundItems={foundItems}/>} />
+      <Route path="/login" element={<LoginPage />}/>
+      <Route path="/signup" element={<SignupPage />}/>
     </Routes>
   </BrowserRouter>
   )

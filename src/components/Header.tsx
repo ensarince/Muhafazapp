@@ -1,19 +1,20 @@
-import { AppBar, IconButton, InputBase, ThemeProvider, Toolbar } from '@mui/material'
+import { AppBar, Button, IconButton, InputBase, ThemeProvider, Toolbar } from '@mui/material'
 import { alpha, styled } from '@mui/material/styles';
 import { createTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
-import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react'
 import {Box}from "@mui/material"; 
-import { fontFamily } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
+import userSlice, { selectUser } from '../features/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = {
   searchLost: string 
   setSearchLost: React.Dispatch<React.SetStateAction<string>>
   searchFound: string 
   setSearchFound: React.Dispatch<React.SetStateAction<string>>
+  handleLogout: () => void
 }
 
 const theme = createTheme({
@@ -69,9 +70,10 @@ const theme = createTheme({
     },
   }));
 
-export default function Header({searchLost, setSearchLost, searchFound, setSearchFound}: Props) {
+export default function Header({searchLost, setSearchLost, searchFound, setSearchFound, handleLogout}: Props) {
 
   const navigate = useNavigate()
+  const user = useSelector(selectUser);
 
   return (
      <ThemeProvider theme={theme}> 
@@ -86,7 +88,7 @@ export default function Header({searchLost, setSearchLost, searchFound, setSearc
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', fontFamily:"monospace", cursor:"pointer" } }}
           >
-            Muhafazapp
+            muhafazapp
           </Typography>
           <Search>
             <SearchIconWrapper> 
@@ -97,6 +99,16 @@ export default function Header({searchLost, setSearchLost, searchFound, setSearc
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+          <Typography
+            onClick={() => navigate("/")}
+            variant="body2"
+            color="secondary"
+            noWrap
+            sx={{ marginX:"0.5em", display: { fontFamily:"monospace" } }}
+          >
+            {user?.email}
+          </Typography>
+          <Button onClick={handleLogout} variant='outlined' sx={{marginLeft:"0.3em", fontSize:"0.8em"}} color='inherit'>ÇIKIŞ</Button>
         </Toolbar>
       </AppBar>
     </Box>

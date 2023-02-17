@@ -7,6 +7,8 @@ import {db, storage} from "../firebase"
 import { addDoc, collection, serverTimestamp, doc, updateDoc } from 'firebase/firestore'
 import {ref, getDownloadURL, uploadString} from "@firebase/storage"
 import { Esya } from '../types';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../features/userSlice';
 
 type Props = {
     handleCloseFound: () => void
@@ -39,6 +41,7 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
         const [selectedFile, setSelectedFile] = useState(null)
         const [loading, setLoading] = useState(false)
         const filePickerRef = useRef<HTMLInputElement>(null)
+        const user = useSelector(selectUser);
     
         //change function for category showing
         const handleChange = (event: SelectChangeEvent) => {
@@ -70,7 +73,7 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
             //4. get the imgUrl and update the post
     
             const docRef = await addDoc(collection(db, 'foundItems'), {
-                //username: session.user.name,
+                user: user.email,
                 esya: esya,
                 category: category,
                 contact: contact,
@@ -106,7 +109,7 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
             </Typography>
             <TextField id="outlined-basic" onChange={e => setEsya(e.target.value)} label="Eşya adı" variant="outlined" />
             <TextField id="outlined-basic" onChange={e => setLocation(e.target.value)} label="Lokasyon" variant="outlined" />
-            <TextField id="outlined-basic" onChange={e => setContact(e.target.value)} label="Kontakt" variant="outlined" />
+            <TextField id="outlined-basic" multiline onChange={e => setContact(e.target.value)} label="Kontakt" variant="outlined" />
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
                 <Select

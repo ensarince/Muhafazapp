@@ -2,3 +2,14 @@ body{
   margin: 0;
   padding: 0;
 }
+
+.form__wrapper{
+  width: 50%;
+  height: 30%;
+}
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (min-width: 600px) {
+  .form__wrapper{ 
+    width: 30%;
+  }
+}

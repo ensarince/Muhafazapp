@@ -94,6 +94,9 @@ export default function CardComponent({item}: Props) {
               <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                 {item.description}
               </Typography>
+              <Typography id="transition-modal-title" sx={{textDecoration:"underline"}} variant="h6">
+                {item.user}
+              </Typography>
             </Box>
           </Fade>
         </Modal>

@@ -1,11 +1,14 @@
 import { Button, Grid, Pagination, Typography } from '@mui/material';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import CardComponent from '../components/CardComponent';
 import FoundModalComponent from '../components/FoundModalComponent';
 import Header from '../components/Header'
 import LostModalComponent from '../components/LostModalComponent';
-import { db } from '../firebase';
+import { logout, selectUser } from '../features/userSlice';
+import { auth, db } from '../firebase';
 import { Esya } from '../types';
 import styles from "./Home.module.css"
 
@@ -31,6 +34,31 @@ function HomePage({lostItems, foundItems}: Props) {
     const [searchLost, setSearchLost] = useState<any>("")
     const [searchFound, setSearchFound] = useState<any>("")
 
+    const navigate = useNavigate()
+
+    //user auth checking
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+            const uid = user.uid;
+              // ...
+            } else {
+              // User is signed out
+            console.log("user is logged out")
+            }
+        });
+    }, [])
+
+    //logout
+    const handleLogout = () => {     
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            navigate("/");
+        }).catch((error) => {
+        alert(error)
+        });
+    }
+
     const handleSearchLost = () => {
         return lostItems?.filter((item: Esya) => (
             item.esya?.toLowerCase().includes(searchLost?.toLowerCase()) ||
@@ -52,7 +80,7 @@ function HomePage({lostItems, foundItems}: Props) {
 
 return (
     <>
-    <Header searchLost={searchLost} setSearchLost={setSearchLost} searchFound={searchFound} setSearchFound={setSearchFound} />
+    <Header handleLogout={handleLogout} searchLost={searchLost} setSearchLost={setSearchLost} searchFound={searchFound} setSearchFound={setSearchFound} />
 
     <div className={styles.container}>
         <LostModalComponent openLost={openLost} setOpenLost={setOpenLost} handleCloseLost = {handleCloseLost}/>

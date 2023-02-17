@@ -1,13 +1,13 @@
 // Import the functions you need from the SDKs you need
-import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import 'firebase/compat/auth';
 import 'firebase/storage'
 import {getFirestore} from "firebase/firestore"
 import {getStorage} from "firebase/storage"
+import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthCredential } from "firebase/auth";
+import firebase from 'firebase/app';
 
 import { initializeApp, getApp, getApps } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD6W0WZQupBzfK82x7ENlUIodRHmLZdhUw",
@@ -19,10 +19,16 @@ const firebaseConfig = {
   measurementId: "G-MPG9Z8WRL8"
 };
 
+// Add or Remove authentification methods here.
+export const Providers = {
+  google: new GoogleAuthProvider()
+};
+
 // get the apps, if there are no apps, get app
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth()
 const db = getFirestore();
 const storage = getStorage();
 
 
-export {app, db, storage};
+export {app, db, storage, auth};
