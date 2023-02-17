@@ -1,7 +1,10 @@
 import React from 'react'
 import { alpha, Backdrop, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, createTheme, Fade, Modal, styled, Typography } from '@mui/material'
 import { Esya } from '../types';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../features/userSlice';
+import { db } from '../firebase';
+import { deleteDoc, doc } from 'firebase/firestore';
 
 type Props = {
   item: Esya
@@ -31,20 +34,29 @@ const style = {
   p: 4,
 };
 
-
-const text = styled('h6')(({ theme }) => ({
-  textDecoration: "none"
-}));
-
 export default function CardComponent({item}: Props) {
-
+  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const user = useSelector(selectUser);
+  
+  //delete post func
+  const handleDelete = async() => {
+    try{
+      await deleteDoc(doc(db, "lostItems" || "foundItems", item.id))
+          .then(()=>{
+            alert("successfully deleted! ")
+          })
+        } catch (error) {
+          alert(error)
+        }
+        window.location.reload()
+  }
 
   return (
     <div>
-        <Card onClick={handleOpen} sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
               <CardMedia
                 component="img"
@@ -66,10 +78,21 @@ export default function CardComponent({item}: Props) {
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary" onClick={handleOpen}>
+              <Button onClick={handleOpen} size="small" color="primary">
                 Detay              
               </Button>
             </CardActions>
+            {item.user === user.email ? (
+            <CardActions>
+            <Typography variant="body2" style={{fontSize:"0.7em"}} color="text.secondary">
+                  Bu item bulundu mu?
+                </Typography>
+              <Button onClick={handleDelete} size="small" sx={{fontSize:"0.7em"}} color="secondary">
+                Ilan kaldır              
+              </Button>
+            </CardActions>
+              ) : (<></>)
+            }
           </Card>
 
           <Modal

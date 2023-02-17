@@ -25,7 +25,7 @@ export default function LoginPage({}: Props) {
   }
   return (
     <div style={{height:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", background:"url(/1.png)"}}>
-              <div className="form__wrapper" style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:"0.5em", background:"white", padding:"2%", borderRadius:"1em", opacity:"0.9"}}>                                            
+              <div className="form__wrapper" style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:"0.5em", background:"white", padding:"5%", borderRadius:"1em", opacity:"0.9"}}>                                            
                     <TextField id="outlined-basic" onChange={e => setEmail(e.target.value)} label="Email" variant="outlined" />
                     <TextField id="outlined-basic" onChange={e => setPassword(e.target.value)} type="password" label="Şifre" variant="outlined" />
                     <Button onClick={onLogin} variant='contained' color='primary'>Giriş</Button>

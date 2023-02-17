@@ -36,7 +36,6 @@ function App() {
       //!check if logged in or not with onAuthStateChanged, and clean it after(the listener)
       const unsubscribe = auth.onAuthStateChanged(userAuth => {
         if(userAuth){
-          console.log(userAuth)
           //logged in
           dispatch(login({
             uid: userAuth.uid,

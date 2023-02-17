@@ -9,6 +9,7 @@ import {ref, getDownloadURL, uploadString} from "@firebase/storage"
 import { Esya } from '../types';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../features/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     handleCloseLost: () => void
@@ -70,7 +71,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
         //1. create a post and add to firestore 'posts' collection
         //2. get the post id 
         //3. upload the image to storage
-        //4. get the imgUrl and update the post
+        //4. get the imgUrl and update the post with added id
 
         const docRef = await addDoc(collection(db, 'lostItems'), {
             user: user.email,
@@ -87,6 +88,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
         .then(async snapshot => {
             const downloadURL = await getDownloadURL(imageRef);
             await updateDoc(doc(db, 'lostItems', docRef.id), {
+                id: docRef.id,
                 image: downloadURL
             })
         });
@@ -151,7 +153,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                         )
                     }
                 </div>
-                <Button onClick={uploadPost} disabled={loading} variant='contained' color='primary'>Gönder</Button>
+                <Button onClick={uploadPost} disabled={loading && !category || !esya || !location || !contact || !description || !selectedFile} variant='contained' color='primary'>Gönder</Button>
             </Box>
         </Modal>
     </div>

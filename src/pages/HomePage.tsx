@@ -1,13 +1,11 @@
 import { Button, Grid, Pagination, Typography } from '@mui/material';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CardComponent from '../components/CardComponent';
 import FoundModalComponent from '../components/FoundModalComponent';
 import Header from '../components/Header'
 import LostModalComponent from '../components/LostModalComponent';
-import { logout, selectUser } from '../features/userSlice';
 import { auth, db } from '../firebase';
 import { Esya } from '../types';
 import styles from "./Home.module.css"
@@ -77,7 +75,6 @@ function HomePage({lostItems, foundItems}: Props) {
         ))
     }
 
-
 return (
     <>
     <Header handleLogout={handleLogout} searchLost={searchLost} setSearchLost={setSearchLost} searchFound={searchFound} setSearchFound={setSearchFound} />
@@ -101,7 +98,7 @@ return (
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg:16, xl: 20 }}>
         {handleSearchLost().map((item, index) => (
             <Grid item xs={2} sm={4} md={4} key={index}>
-            <CardComponent item={item} />
+            <CardComponent /* setPostIdToBeDeleted={setPostIdToBeDeleted} handleDelete={handleDelete} */ item={item} />
             </Grid>
         ))}
         </Grid>

@@ -70,9 +70,9 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
             //1. create a post and add to firestore 'posts' collection
             //2. get the post id 
             //3. upload the image to storage
-            //4. get the imgUrl and update the post
+            //4. get the imgUrl and update the post with added id
     
-            const docRef = await addDoc(collection(db, 'foundItems'), {
+            const docRef = await addDoc(collection(db, 'foundItems'), {  
                 user: user.email,
                 esya: esya,
                 category: category,
@@ -87,6 +87,7 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
             .then(async snapshot => {
                 const downloadURL = await getDownloadURL(imageRef);
                 await updateDoc(doc(db, 'foundItems', docRef.id), {
+                    id: docRef.id,
                     image: downloadURL
                 })
             });
@@ -95,14 +96,13 @@ export default function FoundModalComponent({handleCloseFound, openFound = false
             setLoading(false)
             setSelectedFile(null)
         }
-  return (
+return (
     <div>
     <Modal
         open={openFound}
         onClose={handleCloseFound}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-    >
+        aria-describedby="modal-modal-description">
         <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2" >
                 Bulunan Eşya Formu

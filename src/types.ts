@@ -1,5 +1,5 @@
 export type Esya = {
-    id: string,
+    id: string
     user: string,
     esya: string,
     location?: string,
