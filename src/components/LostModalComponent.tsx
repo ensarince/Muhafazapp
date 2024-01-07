@@ -1,6 +1,5 @@
 import React, { ChangeEvent, LegacyRef, useRef, useState } from 'react'
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
-import { Textarea } from '@mui/joy'
+import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField, TextareaAutosize, Typography } from '@mui/material'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {db, storage} from "../firebase"
@@ -112,11 +111,11 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                 <Typography id="modal-modal-title" variant="h6" component="h2" >
                     Kayıp Eşya Form
                 </Typography>
-                <TextField id="outlined-basic" onChange={e => setEsya(e.target.value)} label="Eşya adı" variant="outlined" />
-                <TextField id="outlined-basic" onChange={e => setLocation(e.target.value)} label="Lokasyon" variant="outlined" />
-                <TextField id="outlined-basic" multiline onChange={e => setContact(e.target.value)} label="Kontakt" variant="outlined" />
+                <TextField id="outlined-basic" onChange={e => setEsya(e.target.value)} label="Item name" variant="outlined" />
+                <TextField id="outlined-basic" onChange={e => setLocation(e.target.value)} label="Location" variant="outlined" />
+                <TextField id="outlined-basic" multiline onChange={e => setContact(e.target.value)} label="Contact" variant="outlined" />
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Kategori</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Category</InputLabel>
                     <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -124,17 +123,17 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                     label="Category"
                     onChange={handleChange}
                     >
-                    <MenuItem value="Elektrik-Elektronik">Elektrik-Elektronik</MenuItem>
-                    <MenuItem value="Ev eşyası">Ev eşyası</MenuItem>
-                    <MenuItem value="Mücevherat">Mücevherat</MenuItem>
-                    <MenuItem value="Diğer">Diğer</MenuItem>
+                    <MenuItem value="Clothing">Clothing</MenuItem>
+                    <MenuItem value="Accessories">Accessories</MenuItem>
+                    <MenuItem value="Appliances">Appliances</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
                     </Select>
                 </FormControl>
-                <Textarea
+                <TextareaAutosize
                 onChange={e => setDescription(e.target.value)}
                 minRows={2}
-                placeholder="Detaylı açıklama"
-                size="lg"
+                placeholder="Detailed description"
+                /* size="lg" */
                 />
                 <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", background:"white", padding:"1em", overflow:"hidden"}}>
                     {selectedFile ? 
@@ -146,7 +145,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                         ) : (
                             <div onClick={() =>filePickerRef.current?.click()} style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", cursor:"pointer"}}>
                             <Typography id="modal-modal-title" variant="body1" component="h5">
-                                Resim ekle
+                                Add image
                             </Typography>
                                 <AddToPhotosIcon sx={{width:"5em", height:"2em", '&:hover': {color:"green"}}} />
                                 <input type="file" ref={filePickerRef} hidden onChange={addImageToPost}/>
@@ -154,7 +153,7 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                         )
                     }
                 </div>
-                <Button onClick={uploadPost} disabled={loading && !category || !esya || !location || !contact || !description || !selectedFile} variant='contained' color='primary'>Gönder</Button>
+                <Button onClick={uploadPost} disabled={loading && !category || !esya || !location || !contact || !description || !selectedFile} variant='contained' color='primary'>Send</Button>
             </Box>
         </Modal>
     </div>

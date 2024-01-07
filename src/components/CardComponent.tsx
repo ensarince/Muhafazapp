@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { alpha, Backdrop, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, createTheme, Fade, Modal, styled, Typography } from '@mui/material'
+import { Backdrop, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Fade, Modal, Typography } from '@mui/material'
 import { Esya } from '../types';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../features/userSlice';
@@ -9,18 +9,6 @@ import { deleteDoc, doc } from 'firebase/firestore';
 type Props = {
   item: Esya
 }
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main:  '#222831',
-    },
-    secondary: {
-      main:  '#EEEEEE',
-    },
-  },
-});
-
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -60,7 +48,7 @@ export default function CardComponent({item}: Props) {
         }
         window.location.reload()
   }
-
+  
   return (
     <div>
         <Card sx={{ maxWidth: 345 }}>
@@ -68,7 +56,7 @@ export default function CardComponent({item}: Props) {
               <CardMedia
                 component="img"
                 height="140"
-                image={item.image || "https://cdn.pixabay.com/photo/2017/06/26/15/46/help-2444110__340.png"}
+                image={item?.image !== undefined ? item.image : "https://cdn.pixabay.com/photo/2017/06/26/15/46/help-2444110__340.png"}
                 alt="green iguana"
                 style={{objectFit:"contain"}}
               />
@@ -86,16 +74,16 @@ export default function CardComponent({item}: Props) {
             </CardActionArea>
             <CardActions>
               <Button onClick={handleOpen} size="small" color="primary">
-                Detay              
+                Details              
               </Button>
             </CardActions>
             {item.user === user.email ? (
             <CardActions>
             <Typography variant="body2" style={{fontSize:"0.7em"}} color="text.secondary">
-                  Bu item bulundu mu?
+                  Gone already?
                 </Typography>
               <Button onClick={handleDelete} size="small" sx={{fontSize:"0.7em"}} color="secondary">
-                Ilan kaldır              
+                Remove ad      
               </Button>
             </CardActions>
               ) : (<></>)

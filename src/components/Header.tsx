@@ -1,13 +1,15 @@
-import { AppBar, Button, IconButton, InputBase, ThemeProvider, Toolbar } from '@mui/material'
-import { alpha, styled } from '@mui/material/styles';
-import { createTheme } from '@mui/material';
+import { AppBar, Button,  InputBase, Toolbar } from '@mui/material'
+import { styled, alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import React from 'react'
 import {Box}from "@mui/material"; 
 import { useNavigate } from 'react-router-dom';
-import userSlice, { selectUser } from '../features/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../features/userSlice';
+import { useSelector } from 'react-redux';
+import createTheme from '@mui/material/styles/createTheme';
+import { ThemeProvider } from '@emotion/react';
+import colors from "../assets/colors.module.scss"
 
 type Props = {
   searchLost: string 
@@ -15,15 +17,16 @@ type Props = {
   searchFound: string 
   setSearchFound: React.Dispatch<React.SetStateAction<string>>
   handleLogout: () => void
+  setlostPage : React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const theme = createTheme({
     palette: {
       primary: {
-        main:  '#222831',
+        main:  colors.primary_dark,
       },
       secondary: {
-        main:  '#EEEEEE',
+        main: colors.primary_white,
       },
     },
   });
@@ -57,7 +60,6 @@ const theme = createTheme({
     color: 'inherit',
     '& .MuiInputBase-input': {
       padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
       width: '100%',
@@ -70,7 +72,12 @@ const theme = createTheme({
     },
   }));
 
-export default function Header({searchLost, setSearchLost, searchFound, setSearchFound, handleLogout}: Props) {
+export default function Header({  searchLost, 
+                                  setSearchLost, 
+                                  searchFound, 
+                                  setSearchFound, 
+                                  handleLogout,
+                                  setlostPage }: Props) {
 
   const navigate = useNavigate()
   const user = useSelector(selectUser);
@@ -80,26 +87,48 @@ export default function Header({searchLost, setSearchLost, searchFound, setSearc
       <Box>
       <AppBar color='primary' position="static">
         <Toolbar>
-          <Typography
+{/*           <Typography
             onClick={() => navigate("/")}
             variant="h5"
             color="secondary"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', fontFamily:"monospace", cursor:"pointer" } }}
+            sx={{ flexGrow: 1, display: { sm: 'block', fontFamily:"monospace", cursor:"pointer", width:"80%"} }}
           >
-            muhafazapp
-          </Typography>
-          <Search>
+            SaarSwap
+          </Typography> */}
+{/*           <Box sx={{display:"flex", gap:"1rem", justifyContent:"center", alignItems:"start"}}>
+            <Typography
+              onClick={() => setlostPage(false)}
+              variant="h5"
+              color="secondary"
+              noWrap
+              component="div"
+              sx={{ display: { sm: 'block', fontFamily:"monospace", cursor:"pointer" } }}
+            >
+              Buy
+            </Typography>
+            <Typography
+              onClick={() => setlostPage(true)}
+              variant="h5"
+              color="secondary"
+              noWrap
+              component="div"
+              sx={{ display: { sm: 'block', fontFamily:"monospace", cursor:"pointer", marginRight:"1rem" } }}
+            >
+              Trade
+            </Typography>
+          </Box> */}
+          <Search sx={{marginRight:"0.5rem"}}>
             <SearchIconWrapper> 
               <SearchIcon  color='secondary'/>
             </SearchIconWrapper>
             <StyledInputBase onChange={(e) => {setSearchFound(e.target.value); setSearchLost(e.target.value);}} color='secondary'
-              placeholder="Ara..."
+              placeholder="Search"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Typography
+{/*           <Typography
             onClick={() => navigate("/")}
             variant="body2"
             color="secondary"
@@ -107,8 +136,8 @@ export default function Header({searchLost, setSearchLost, searchFound, setSearc
             sx={{ marginX:"0.5em", display: { fontFamily:"monospace" } }}
           >
             {user?.email}
-          </Typography>
-          <Button onClick={handleLogout} variant='outlined' sx={{marginLeft:"0.3em", fontSize:"0.8em"}} color='inherit'>ÇIKIŞ</Button>
+          </Typography> */}
+          <Button onClick={handleLogout} variant='outlined' sx={{marginLeft:"0.3em", fontSize:"0.8em"}} color='inherit'>Logout</Button>
         </Toolbar>
       </AppBar>
     </Box>

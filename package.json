@@ -4,17 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "host": "vite --host",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/joy": "^5.0.0-alpha.66",
-    "@mui/material": "^5.11.8",
+    "@mui/icons-material": "^5.15.3",
+    "@mui/material": "^5.15.3",
     "@reduxjs/toolkit": "^1.9.2",
     "@types/firebase": "^3.2.1",
     "firebase": "^9.17.1",
@@ -23,7 +23,8 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-responsive-carousel": "^3.2.23",
-    "react-router-dom": "^6.8.1"
+    "react-router-dom": "^6.8.1",
+    "sass": "^1.69.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

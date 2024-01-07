@@ -1,0 +1,24 @@
+
+//Primary colors
+$primary_dark: #222831;
+$primary_grey: #393E46;
+$primary_green: #00ADB5;
+$primary_white: #EEEEEE;
+
+//Secondary colors
+$secondary_blue: #1B262C;
+$secondary_blue_soft: #0F4C75;
+$secondary_blue_softer: #3282B8;
+$secondary_blue_softest: #BBE1FA;
+
+:export {
+    primary_dark: $primary_dark;
+    primary_grey: $primary_grey;
+    primary_green: $primary_green;
+    primary_white: $primary_white;
+    secondary_blue: $secondary_blue;
+    secondary_blue_soft: $secondary_blue_soft;
+    secondary_blue_softer: $secondary_blue_softer;
+    secondary_blue_softest: $secondary_blue_softest;
+}
+
