@@ -15,8 +15,8 @@ function Navigator({ pageCount, setPageCount }: Props) {
 
   return (
     <Box sx={{
-        position:"absolute",
-        bottom:"0%",
+        position:"sticky",
+        bottom:"0",
         background: colors.primary_dark,
         width:"100%",
         height:"4.5rem"
