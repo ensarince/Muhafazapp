@@ -1,4 +1,5 @@
 import React from 'react'
+import styles from "./Home.module.scss"
 
 type Props = {
     
@@ -7,7 +8,9 @@ type Props = {
 export default function MessagePage({ }: Props) {
   return (
     <>
-        <div>MessagePage</div>
+        <div className={styles.container}>
+          MessagePage
+        </div>
     </>
   )
 }

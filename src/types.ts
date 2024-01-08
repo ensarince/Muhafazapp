@@ -3,10 +3,10 @@ export type Esya = {
     user: string,
     esya: string,
     location?: string,
-    contact?: string
     category?: string
     image?: string
     description?: string
-    isMissing?: boolean
-    isFound?: boolean
+    isSelling?: boolean
+    isTrading?: boolean
+    isLending?: boolean
 }

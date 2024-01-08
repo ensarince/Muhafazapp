@@ -1,37 +1,29 @@
 import { Box, Button, Grid, Pagination, Typography } from '@mui/material';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import CardComponent from '../components/CardComponent';
-import FoundModalComponent from '../components/FoundModalComponent';
 import Header from '../components/Header'
-import LostModalComponent from '../components/LostModalComponent';
+import LostModalComponent from '../components/ModalComponent';
 import { auth } from '../firebase';
 import { Esya } from '../types';
 import styles from "./Home.module.scss"
 import colors from "../assets/colors.module.scss"
 
 type Props = {
-    lostItems: Esya[]
-    foundItems: Esya[]
+    items: Esya[]
 }
 
-function HomePage({lostItems, foundItems}: Props) {
+function HomePage({items}: Props) {
     //open close controller for modals
-    const [openLost, setOpenLost] = useState(false)
-    const handleOpenLost = () => setOpenLost(true);
-    const handleCloseLost = () => setOpenLost(false);
-
-    const [openFound, setOpenFound] = useState(false)
-    const handleOpenFound = () => setOpenFound(true);
-    const handleCloseFound = () => setOpenFound(false);
+    const [openModal, setOpenModal] = useState(false)
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
 
     const [page, setPage] = useState<number>(1)
-    const [lostPage, setlostPage] = useState(false)
 
     //search ınput
-    const [searchLost, setSearchLost] = useState<any>("")
-    const [searchFound, setSearchFound] = useState<any>("")
+    const [searchItem, setSearchItem] = useState<any>("")
 
     const [filtered, setFiltered] = useState<number[]>([])
 
@@ -61,22 +53,21 @@ function HomePage({lostItems, foundItems}: Props) {
     }
 
     const handleSearchLost = () => {
-        return lostItems?.filter((item: Esya) => (
-            item.esya?.toLowerCase().includes(searchLost?.toLowerCase()) ||
-            item.category?.toLowerCase().includes(searchLost?.toLowerCase()) ||
-            item.location?.toLowerCase().includes(searchLost?.toLowerCase()) ||
-            item.contact?.toLowerCase().includes(searchLost?.toLowerCase()) 
-        ))
-    }
+        return items?.filter((item: Esya) => {
+            // Check if the item should be filtered based on category checkboxes
+            const categoryFilter =
+                (!filtered.includes(0) || item.isSelling) &&
+                (!filtered.includes(1) || item.isTrading) &&
+                (!filtered.includes(2) || item.isLending);
+            // Check if the item matches the search text
+            const searchFilter =
+                item.esya?.toLowerCase().includes(searchItem?.toLowerCase()) ||
+                item.category?.toLowerCase().includes(searchItem?.toLowerCase()) ||
+                item.location?.toLowerCase().includes(searchItem?.toLowerCase());
 
-    const handleSearchFound = () => {
-        return foundItems?.filter((item: Esya) => (
-            item.esya?.toLowerCase().includes(searchLost?.toLowerCase()) ||
-            item.category?.toLowerCase().includes(searchLost?.toLowerCase()) ||
-            item.location?.toLowerCase().includes(searchLost?.toLowerCase()) ||
-            item.contact?.toLowerCase().includes(searchLost?.toLowerCase()) 
-        ))
-    }
+            return categoryFilter && searchFilter;
+        });
+    };
 
     const handleFiltering = (index: number) => {
         if (filtered.includes(index)) {
@@ -90,17 +81,12 @@ return (
     <>
     <Header 
         handleLogout={handleLogout} 
-        searchLost={searchLost} 
-        setSearchLost={setSearchLost} 
-        searchFound={searchFound} 
-        setSearchFound={setSearchFound}
-        setlostPage={setlostPage}
+        searchItem={searchItem} 
+        setSearchItem={setSearchItem} 
     />
 
     <div className={styles.container}>
-        <LostModalComponent openLost={openLost} setOpenLost={setOpenLost} handleCloseLost = {handleCloseLost}/>
-        <FoundModalComponent openFound={openFound} setOpenFound={setOpenFound} handleCloseFound = {handleCloseFound}/>
-
+        <LostModalComponent openModal={openModal} setOpenModal={setOpenModal} handleCloseModal = {handleCloseModal}/>
         <Box 
             sx={{
                 display:"flex",
@@ -182,10 +168,9 @@ return (
                 height:"4.5rem", 
                 minWidth:"4rem"
             }} 
-            onClick={lostPage ? handleOpenLost : handleOpenFound}>+
+            onClick={handleOpenModal}>+
         </Button>
-        {lostPage ? 
-        (
+
             <>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg:16, xl: 20 }}>
                 {handleSearchLost()?.map((item, index) => (
@@ -209,31 +194,6 @@ return (
                     }}
                 />
             </>
-        ) : (
-            <>            
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg: 16, xl:20 }}>
-                {handleSearchFound().slice((page - 1) * 10, (page - 1) * 10 + 10)?.map((item, index) => (
-                    <Grid item xs={2} sm={4} md={4} key={index}>
-                    <CardComponent item={item} />
-                    </Grid>
-                ))}
-            </Grid>
-
-                <Pagination 
-                    style={{padding: 20,
-                        width:"100%",
-                        display:"flex",
-                        justifyContent:"center",
-                        color:"default"
-                    }}
-                    count={(handleSearchFound().slice((page - 1) * 10, (page - 1) * 10 + 10)?.length / 10)/* .toFixed() */}
-                    onChange={(_, value) => {
-                    setPage(value);
-                    window.scroll(0, 10)
-                }}/>
-            </>
-        )
-        }
     </div>
     </>
 )

@@ -111,19 +111,18 @@ function App() {
       const dispatch = useDispatch();
 
       //data storing & managing
-      const [lostItems, setLostItems] = useState<Esya[]>([])
-      const [foundItems, setFoundItems] = useState<Esya[]>([])
+      const [items, setItems] = useState<Esya[]>([])
 
       const [pageCount, setPageCount] = useState<number>(0)
   
       //getting lost item data
       useEffect(() => {
-        const unsubscribe = onSnapshot(query(collection(db, 'lostItems'), orderBy('timestamp', 'desc')), 
+        const unsubscribe = onSnapshot(query(collection(db, 'items'), orderBy('timestamp', 'desc')), 
         (snapshot: any) => {
           let itemArray:any = []
             snapshot.forEach((item: any) => {
               itemArray.push(item.data())
-              setLostItems(itemArray)
+              setItems(itemArray)
             });
         });
         return unsubscribe
@@ -148,24 +147,11 @@ function App() {
       return unsubscribe;
     }, [dispatch])
 
-        //getting found item data
-        useEffect(() => {
-            const unsubscribe = onSnapshot(query(collection(db, 'foundItems'), orderBy('timestamp', 'desc')), 
-            (snapshot: any) => {
-              let itemArray: any = []
-              snapshot.forEach((item: any) => {
-                itemArray.push(item.data())
-              });
-                setFoundItems(itemArray)
-            });
-            return unsubscribe
-        }, [db])   
-
   return (
     <ThemeProvider theme={saarTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={!user ? <LoginPage /> : <HomePage lostItems={lostItems} foundItems={foundItems}/>} />
+          <Route path="/" element={!user ? <LoginPage /> : <HomePage items={items}/>} />
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/signup" element={<SignupPage />}/>
           <Route path="/inbox" element={!user ? <LoginPage /> : <MessagePage />}/>

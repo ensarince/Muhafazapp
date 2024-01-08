@@ -12,12 +12,9 @@ import { ThemeProvider } from '@emotion/react';
 import colors from "../assets/colors.module.scss"
 
 type Props = {
-  searchLost: string 
-  setSearchLost: React.Dispatch<React.SetStateAction<string>>
-  searchFound: string 
-  setSearchFound: React.Dispatch<React.SetStateAction<string>>
+  searchItem: string 
+  setSearchItem: React.Dispatch<React.SetStateAction<string>>
   handleLogout: () => void
-  setlostPage : React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const theme = createTheme({
@@ -72,15 +69,12 @@ const theme = createTheme({
     },
   }));
 
-export default function Header({  searchLost, 
-                                  setSearchLost, 
-                                  searchFound, 
-                                  setSearchFound, 
-                                  handleLogout,
-                                  setlostPage }: Props) {
+export default function Header({  searchItem, 
+                                  setSearchItem,
+                                  handleLogout }: Props) {
 
-  const navigate = useNavigate()
-  const user = useSelector(selectUser);
+  //const navigate = useNavigate()
+  //const user = useSelector(selectUser);
 
   return (
      <ThemeProvider theme={theme}> 
@@ -123,7 +117,7 @@ export default function Header({  searchLost,
             <SearchIconWrapper> 
               <SearchIcon  color='secondary'/>
             </SearchIconWrapper>
-            <StyledInputBase onChange={(e) => {setSearchFound(e.target.value); setSearchLost(e.target.value);}} color='secondary'
+            <StyledInputBase onChange={(e) => {setSearchItem(e.target.value)}} color='secondary'
               placeholder="Search"
               inputProps={{ 'aria-label': 'search' }}
             />

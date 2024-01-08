@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+    height: fit-content;
+    background: url("/1.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+    padding: 1.3em;
+    gap: 1em;
+}

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Backdrop, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Fade, Modal, Typography } from '@mui/material'
 import { Esya } from '../types';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../features/userSlice';
 import { db } from '../firebase';
 import { deleteDoc, doc } from 'firebase/firestore';
+import colors from "../assets/colors.module.scss"
 
 type Props = {
   item: Esya
@@ -12,12 +13,17 @@ type Props = {
 
 const style = {
   position: 'absolute' as 'absolute',
+  color:"#fff",
+  display:"flex",
+  justifyContent:"center",
+  alignItems:"center",
+  flexDirection:"column",
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: colors.primary_dark,
+  border: `2px solid ${colors.secondary_blue_softest}`,
   boxShadow: 24,
   p: 4,
 };
@@ -28,18 +34,12 @@ export default function CardComponent({item}: Props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector(selectUser);
-  const [collection, setCollection] = useState("")
-
-  useEffect(() => {
-    item.isMissing ? setCollection("lostItems") : setCollection("foundItems")
-  }, [])
-  
-  //there are two collections, reach the right one from the item isMissing, isFound values
+  //const [collection, setCollection] = useState("")
 
   //delete post func
   const handleDelete = async() => {
     try{
-      await deleteDoc(doc(db, collection, item.id))
+      await deleteDoc(doc(db, "items", item.id))
           .then(()=>{
             alert("successfully deleted! ")
           })
@@ -106,9 +106,7 @@ export default function CardComponent({item}: Props) {
               <Typography id="transition-modal-title" variant="h6" component="h2">
                 {item.esya}
               </Typography>
-              <Typography id="transition-modal-title" variant="h6" component="h2">
-                {item.contact}
-              </Typography>
+              <img src={item.image} style={{width:"50%"}} alt="item" />
               <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                 {item.description}
               </Typography>

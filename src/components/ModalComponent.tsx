@@ -1,5 +1,5 @@
 import React, { ChangeEvent, LegacyRef, useRef, useState } from 'react'
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField, TextareaAutosize, Typography } from '@mui/material'
+import { Box, Button, Checkbox, CheckboxProps, FormControl, FormControlLabel, FormGroup, FormLabel, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, SelectChangeEvent, TextField, TextareaAutosize, Typography } from '@mui/material'
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {db, storage} from "../firebase"
@@ -9,11 +9,12 @@ import { Esya } from '../types';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../features/userSlice';
 import { useNavigate } from 'react-router-dom';
+import colors from "../assets/colors.module.scss"
 
 type Props = {
-    handleCloseLost: () => void
-    openLost: boolean
-    setOpenLost: (value: React.SetStateAction<boolean>) => void
+    handleCloseModal: () => void
+    openModal: boolean
+    setOpenModal: (value: React.SetStateAction<boolean>) => void
 }
 
 const style = {
@@ -22,7 +23,8 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
+    bgcolor: colors.secondary_blue_soft,
+    color: colors.primary_white,
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
@@ -31,12 +33,15 @@ const style = {
     gap:"1em"
 };
 
-export default function ModalComponent({handleCloseLost, openLost = false, setOpenLost}: Props) {
+export default function ModalComponent({handleCloseModal, openModal = false, setOpenModal}: Props) {
     //refs and usestates for data handling
     const [category, setCategory] = useState("")
     const [esya, setEsya] = useState<HTMLInputElement | null | string>(null)
     const [description, setDescription] = useState<HTMLInputElement | null | string>(null)
     const [location, setLocation] = useState<HTMLInputElement | null | string>(null)
+    const [isSelling, setIsSelling] = useState<boolean>(false);
+    const [isTrading, setIsTrading] = useState<boolean>(false);
+    const [isLending, setIsLending] = useState<boolean>(false);
     const [contact, setContact] = useState<HTMLInputElement | null | string>(null)
     const [selectedFile, setSelectedFile] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -46,6 +51,22 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
     //change function for category showing
     const handleChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
+    };
+
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        switch (event.target.name) {
+            case 'isSelling':
+                setIsSelling(event.target.checked);
+                break;
+            case 'isTrading':
+                setIsTrading(event.target.checked);
+                break;
+            case 'isLending':
+                setIsLending(event.target.checked);
+                break;
+            default:
+                break;
+        }
     };
 
     //*set image
@@ -72,37 +93,39 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
         //3. upload the image to storage
         //4. get the imgUrl and update the post with added id
 
-        const docRef = await addDoc(collection(db, 'lostItems'), {
+        const docRef = await addDoc(collection(db, 'items'), {
             user: user.email,
             esya: esya,
             category: category,
             contact: contact,
             location: location,
             description: description,
-            isMissing: true,
+            isSelling: isSelling,
+            isTrading: isTrading,
+            isLending: isLending,
             timestamp: serverTimestamp(),
         })
 
-        const imageRef = ref(storage, `lostItems/${docRef.id}`);
+        const imageRef = ref(storage, `items/${docRef.id}`);
         await uploadString(imageRef, selectedFile!, "data_url")
         .then(async snapshot => {
             const downloadURL = await getDownloadURL(imageRef);
-            await updateDoc(doc(db, 'lostItems', docRef.id), {
+            await updateDoc(doc(db, 'items', docRef.id), {
                 id: docRef.id,
                 image: downloadURL
             })
         });
 
-        setOpenLost(false)
+        setOpenModal(false)
         setLoading(false)
         setSelectedFile(null)
     }
 
-  return (
+    return (
     <div>
         <Modal
-            open={openLost}
-            onClose={handleCloseLost}
+            open={openModal}
+            onClose={handleCloseModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             sx={{position: "fixed", top: 10, left: 10, m: 0 }}
@@ -112,23 +135,37 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                     Kayıp Eşya Form
                 </Typography>
                 <TextField id="outlined-basic" onChange={e => setEsya(e.target.value)} label="Item name" variant="outlined" />
-                <TextField id="outlined-basic" onChange={e => setLocation(e.target.value)} label="Location" variant="outlined" />
-                <TextField id="outlined-basic" multiline onChange={e => setContact(e.target.value)} label="Contact" variant="outlined" />
+                {/* <TextField id="outlined-basic" multiline onChange={e => setContact(e.target.value)} label="Contact" variant="outlined" /> */}
+                <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
+                    <FormControlLabel
+                        control={<Checkbox checked={isSelling} onChange={handleCheckboxChange} name="isSelling" />}
+                        label="Selling"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox checked={isTrading} onChange={handleCheckboxChange} name="isTrading" />}
+                        label="Trading"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox checked={isLending} onChange={handleCheckboxChange} name="isLending" />}
+                        label="Lending"
+                    />
+                </FormGroup>
                 <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Category</InputLabel>
-                    <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={category}
-                    label="Category"
-                    onChange={handleChange}
-                    >
-                    <MenuItem value="Clothing">Clothing</MenuItem>
-                    <MenuItem value="Accessories">Accessories</MenuItem>
-                    <MenuItem value="Appliances">Appliances</MenuItem>
-                    <MenuItem value="Other">Other</MenuItem>
-                    </Select>
+                        <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={category}
+                        label="Category"
+                        onChange={handleChange}
+                        >
+                            <MenuItem value="Clothing">Clothing</MenuItem>
+                            <MenuItem value="Accessories">Accessories</MenuItem>
+                            <MenuItem value="Appliances">Appliances</MenuItem>
+                            <MenuItem value="Other">Other</MenuItem>
+                        </Select>
                 </FormControl>
+                <TextField id="outlined-basic" onChange={e => setLocation(e.target.value)} label="Location" variant="outlined" />
                 <TextareaAutosize
                 onChange={e => setDescription(e.target.value)}
                 minRows={2}
@@ -144,16 +181,24 @@ export default function ModalComponent({handleCloseLost, openLost = false, setOp
                             </div> 
                         ) : (
                             <div onClick={() =>filePickerRef.current?.click()} style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", cursor:"pointer"}}>
-                            <Typography id="modal-modal-title" variant="body1" component="h5">
+                            <Typography color={"#111"} id="modal-modal-title" variant="body1" component="h5">
                                 Add image
                             </Typography>
-                                <AddToPhotosIcon sx={{width:"5em", height:"2em", '&:hover': {color:"green"}}} />
+                                <AddToPhotosIcon sx={{width:"5em", height:"2em", color:"#111", '&:hover': {color:"green"}}} />
                                 <input type="file" ref={filePickerRef} hidden onChange={addImageToPost}/>
                             </div>
                         )
                     }
                 </div>
-                <Button onClick={uploadPost} disabled={loading && !category || !esya || !location || !contact || !description || !selectedFile} variant='contained' color='primary'>Send</Button>
+                <Button sx={{alignSelf:"center"}} onClick={uploadPost} 
+                    disabled={
+                        loading && 
+                        category == null || 
+                        (!isSelling && !isTrading && !isLending) || 
+                        esya === null || 
+                        location === null ||
+                        !selectedFile
+                    } variant='outlined' color='primary'>Send</Button>
             </Box>
         </Modal>
     </div>
