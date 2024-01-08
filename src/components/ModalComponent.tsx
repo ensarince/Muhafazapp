@@ -122,17 +122,18 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
     }
 
     return (
-    <div>
         <Modal
             open={openModal}
             onClose={handleCloseModal}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            sx={{position: "fixed", top: 10, left: 10, m: 0 }}
+            sx={{
+                
+            }}
         >
             <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2" >
-                    Kayıp Eşya Form
+                    Add Item
                 </Typography>
                 <TextField id="outlined-basic" onChange={e => setEsya(e.target.value)} label="Item name" variant="outlined" />
                 {/* <TextField id="outlined-basic" multiline onChange={e => setContact(e.target.value)} label="Contact" variant="outlined" /> */}
@@ -172,7 +173,7 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
                 placeholder="Detailed description"
                 /* size="lg" */
                 />
-                <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", background:"white", padding:"1em", overflow:"hidden"}}>
+                <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", background:"transparent", padding:"0.1em", overflow:"hidden"}}>
                     {selectedFile ? 
                         (
                             <div style={{position:"relative"}}>
@@ -181,10 +182,10 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
                             </div> 
                         ) : (
                             <div onClick={() =>filePickerRef.current?.click()} style={{display:"flex", justifyContent:"space-evenly", alignItems:"center", cursor:"pointer"}}>
-                            <Typography color={"#111"} id="modal-modal-title" variant="body1" component="h5">
+                            <Typography color={"#fff"} id="modal-modal-title" variant="body1" component="h5">
                                 Add image
                             </Typography>
-                                <AddToPhotosIcon sx={{width:"5em", height:"2em", color:"#111", '&:hover': {color:"green"}}} />
+                                <AddToPhotosIcon sx={{width:"5em", height:"2em", color:"#fff", '&:hover': {color:colors.primary_green}}} />
                                 <input type="file" ref={filePickerRef} hidden onChange={addImageToPost}/>
                             </div>
                         )
@@ -201,6 +202,5 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
                     } variant='outlined' color='primary'>Send</Button>
             </Box>
         </Modal>
-    </div>
   )
 }
