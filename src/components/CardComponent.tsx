@@ -51,16 +51,16 @@ export default function CardComponent({item}: Props) {
   
   return (
     <div>
-        <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea>
+        <Card sx={{ maxWidth: 345}}>
+            <CardActionArea sx={{pointerEvents:"none"}}>
               <CardMedia
                 component="img"
                 height="140"
                 image={item?.image !== undefined ? item.image : "https://cdn.pixabay.com/photo/2017/06/26/15/46/help-2444110__340.png"}
                 alt="green iguana"
-                style={{objectFit:"contain"}}
+                sx={{objectFit:"contain", overflow:"hidden", width:"100%", height:"7.5rem", marginTop:"1rem"}}
               />
-              <CardContent>
+              <CardContent sx={{}}>
                 <Typography gutterBottom variant="h6" sx={{display:"inline"}}>
                   {item.esya}
                 </Typography>
@@ -106,12 +106,21 @@ export default function CardComponent({item}: Props) {
               <Typography id="transition-modal-title" variant="h6" component="h2">
                 {item.esya}
               </Typography>
-              <img src={item.image} style={{width:"50%"}} alt="item" />
+              <Typography id="transition-modal-title" variant="h6" component="h2">
+                {item.isSelling && item.isTrading && item.isLending ? "For sale + trade + lend" : 
+                  item.isSelling && item.isTrading ? "For sale + trade" : 
+                  item.isSelling && item.isLending ? "For sale + lend" :
+                  item.isLending && item.isTrading ? "For trade + lend" :
+                  item.isSelling ? "For sale" : 
+                  item.isTrading ? "For trade" : 
+                  item.isLending ? "For lend" : null}
+              </Typography>
+              <img src={item.image} style={{width:"50%", height:"50%"}} alt="item" />
               <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                 {item.description}
               </Typography>
-              <Typography id="transition-modal-title" sx={{textDecoration:"underline"}} variant="h6">
-                {item.user}
+              <Typography id="transition-modal-title" variant="h6">
+              Contact: <span style={{textDecoration:"underline"}}>{item.user}</span>
               </Typography>
             </Box>
           </Fade>

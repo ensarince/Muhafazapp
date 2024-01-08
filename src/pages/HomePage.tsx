@@ -174,7 +174,7 @@ return (
             <>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg:16, xl: 20 }}>
                 {handleSearchLost()?.map((item, index) => (
-                    <Grid item xs={2} sm={4} md={4} key={index}>
+                    <Grid item sx={{marginTop:"2rem"}} xs={2} sm={4} md={4} key={index}>
                         <CardComponent /* setPostIdToBeDeleted={setPostIdToBeDeleted} handleDelete={handleDelete} */ item={item} />
                     </Grid>
                 ))}
