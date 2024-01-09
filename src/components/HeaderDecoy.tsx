@@ -12,9 +12,6 @@ import { ThemeProvider } from '@emotion/react';
 import colors from "../assets/colors.module.scss"
 
 type Props = {
-  searchItem: string 
-  setSearchItem: React.Dispatch<React.SetStateAction<string>>
-  handleLogout: () => void
 }
 
   const theme = createTheme({
@@ -69,9 +66,7 @@ type Props = {
     },
   }));
 
-export default function Header({  searchItem, 
-                                  setSearchItem,
-                                  handleLogout }: Props) {
+export default function Header({ }: Props) {
 
   //const navigate = useNavigate()
   //const user = useSelector(selectUser);
@@ -113,15 +108,15 @@ export default function Header({  searchItem,
               Trade
             </Typography>
           </Box> */}
-          <Search sx={{marginRight:"0.5rem"}}>
+{/*           <Search sx={{marginRight:"0.5rem"}}>
             <SearchIconWrapper> 
               <SearchIcon  color='secondary'/>
             </SearchIconWrapper>
-            <StyledInputBase onChange={(e) => {setSearchItem(e.target.value)}} color='secondary'
+            <StyledInputBase  color='secondary'
               placeholder="Search"
               inputProps={{ 'aria-label': 'search' }}
             />
-          </Search>
+          </Search> */}
 {/*           <Typography
             onClick={() => navigate("/")}
             variant="body2"
@@ -131,7 +126,7 @@ export default function Header({  searchItem,
           >
             {user?.email}
           </Typography> */}
-          <Button onClick={handleLogout} variant='outlined' sx={{marginLeft:"0.3em", fontSize:"0.8em"}} color='inherit'>Logout</Button>
+          <Button variant='outlined' sx={{marginLeft:"0.3em", fontSize:"0.8em", position:"absolute", right:"5%"}} color='inherit'>Logout</Button>
         </Toolbar>
       </AppBar>
     </Box>

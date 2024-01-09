@@ -160,13 +160,13 @@ return (
             variant='contained' 
             color='inherit'  
             sx={{
-                fontSize:"1.3em",
                 position:"absolute", 
                 right:"5%", 
                 bottom:"15%", 
                 borderRadius:"100%",
-                height:"4.5rem", 
-                minWidth:"4rem"
+                height:"5.5rem", 
+                minWidth:"5.5rem",
+                fontSize:"30px",
             }} 
             onClick={handleOpenModal}>+
         </Button>
