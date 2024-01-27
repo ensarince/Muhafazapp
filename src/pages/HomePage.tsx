@@ -167,6 +167,7 @@ return (
                 height:"5.5rem", 
                 minWidth:"5.5rem",
                 fontSize:"30px",
+                zIndex:"1000"
             }} 
             onClick={handleOpenModal}>+
         </Button>
