@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Backdrop, Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Fade, Modal, Typography } from '@mui/material'
 import { Esya } from '../types';
 import { useSelector } from 'react-redux';
@@ -6,36 +6,42 @@ import { selectUser } from '../features/userSlice';
 import { db } from '../firebase';
 import { deleteDoc, doc } from 'firebase/firestore';
 import colors from "../assets/colors.module.scss"
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 
 type Props = {
   item: Esya
 }
 
-const style = {
-  position: 'absolute' as 'absolute',
-  color:"#fff",
-  display:"flex",
-  justifyContent:"center",
-  alignItems:"center",
-  flexDirection:"column",
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: colors.primary_dark,
-  border: `2px solid ${colors.secondary_blue_softest}`,
-  boxShadow: 24,
-  p: 4,
-};
+
 
 export default function CardComponent({item}: Props) {
   
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const user = useSelector(selectUser);
   //const [collection, setCollection] = useState("")
+  const [likes, setLikes] = useState([])
+  const [hasLiked, setHasLiked] = useState(false)
 
+  const style = {
+    position: 'absolute' as 'absolute',
+    color:"#fff",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    flexDirection:"column",
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: item.user === user.email ? colors.secondary_blue_soft : colors.primary_dark,
+    border: `2px solid ${colors.secondary_blue_softest}`,
+    boxShadow: 24,
+    p: 4,
+  };
+
+  
   //delete post func
   const handleDelete = async() => {
     try{
@@ -48,10 +54,41 @@ export default function CardComponent({item}: Props) {
         }
         window.location.reload()
   }
+
+  //TODO: IMPLEMENT LIKING FUNCTIONALITY
+             //getting like data
+/*              useEffect(() => {
+              try {
+                const likes = onSnapshot(query(collection(db, 'items', id, 'likes')), 
+                snapshot => {
+                  setLikes(snapshot.docs)
+                });
+                return likes
+              } catch (error) {
+                console.log("Like fetching error --> ", error)
+              }
+            }, [db, id])     
+  
+            //hasLiked info
+             useEffect(() => {
+              setHasLiked(likes.findIndex((like) => like.id === user.email) !== -1)
+            }, [likes])   
+  
+          //like adding functionality
+          const likePost = async() => {
+  
+            if(hasLiked){
+              await deleteDoc(doc(db, 'climbs', id, 'likes', user.email))
+            }else{
+              await setDoc(doc(db, 'climbs', id, 'likes', user.email), {
+                username: user.name 
+              })
+            }
+          } */
   
   return (
     <div>
-        <Card sx={{ maxWidth: 345}}>
+        <Card sx={{ maxWidth: 345, background: item.user === user.email ? colors.secondary_blue_soft : colors.primary_dark}}>
             <CardActionArea sx={{pointerEvents:"none"}}>
               <CardMedia
                 component="img"
@@ -62,7 +99,7 @@ export default function CardComponent({item}: Props) {
               />
               <CardContent sx={{}}>
                 <Typography gutterBottom variant="h6" sx={{display:"inline"}}>
-                  {item.esya}
+                  {item.esya}<span style={{fontWeight:"bold", color:"#fff"}}>{item.price && item.isSelling ?  " " + item.price + "€" : null}</span>
                 </Typography>
                 <Typography variant="inherit" style={{textTransform:"uppercase"}} color="text.secondary">
                   {item.category}
@@ -76,6 +113,15 @@ export default function CardComponent({item}: Props) {
               <Button onClick={handleOpen} size="small" color="primary">
                 Details              
               </Button>
+                    <Box sx={{paddingLeft:"5rem", alignSelf:"center"}}>
+                      {hasLiked ? 
+                        (
+                          <Favorite sx={{}}/* onClick={likePost} */ />
+                        ) :
+                        (
+                          <FavoriteBorder sx={{}}/* onClick={likePost} */ />
+                        )}         
+                    </Box>
             </CardActions>
             {item.user === user.email ? (
             <CardActions>
@@ -104,7 +150,7 @@ export default function CardComponent({item}: Props) {
           <Fade in={open}>
             <Box sx={style}>
               <Typography id="transition-modal-title" variant="h6" component="h2">
-                {item.esya}
+                {item.esya}<span style={{fontWeight:"bold", color:"#fff"}}>{" "}-{item.price && item.isSelling ?  " " + item.price + "€" : null}</span>
               </Typography>
               <Typography id="transition-modal-title" variant="h6" component="h2">
                 {item.isSelling && item.isTrading && item.isLending ? "For sale + trade + lend" : 

@@ -5,6 +5,7 @@ export type Esya = {
     location?: string,
     category?: string
     image?: string
+    price?: string,
     description?: string
     isSelling?: boolean
     isTrading?: boolean

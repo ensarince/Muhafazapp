@@ -63,7 +63,8 @@ function HomePage({items}: Props) {
             const searchFilter =
                 item.esya?.toLowerCase().includes(searchItem?.toLowerCase()) ||
                 item.category?.toLowerCase().includes(searchItem?.toLowerCase()) ||
-                item.location?.toLowerCase().includes(searchItem?.toLowerCase());
+                item.location?.toLowerCase().includes(searchItem?.toLowerCase()) ||
+                item.price?.toLowerCase().includes(searchItem?.toLowerCase());
 
             return categoryFilter && searchFilter;
         });

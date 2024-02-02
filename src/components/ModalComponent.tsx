@@ -39,6 +39,7 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
     const [esya, setEsya] = useState<HTMLInputElement | null | string>(null)
     const [description, setDescription] = useState<HTMLInputElement | null | string>(null)
     const [location, setLocation] = useState<HTMLInputElement | null | string>(null)
+    const [price, setPrice] = useState<HTMLInputElement | null | string>(null);
     const [isSelling, setIsSelling] = useState<boolean>(false);
     const [isTrading, setIsTrading] = useState<boolean>(false);
     const [isLending, setIsLending] = useState<boolean>(false);
@@ -99,6 +100,7 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
             category: category,
             contact: contact,
             location: location,
+            price: price,
             description: description,
             isSelling: isSelling,
             isTrading: isTrading,
@@ -166,6 +168,9 @@ export default function ModalComponent({handleCloseModal, openModal = false, set
                             <MenuItem value="Other">Other</MenuItem>
                         </Select>
                 </FormControl>
+                {isSelling &&
+                    <TextField id="outlined-basic" onChange={e => setPrice(e.target.value)} label="Price(€)" variant="outlined" />
+                }
                 <TextField id="outlined-basic" onChange={e => setLocation(e.target.value)} label="Location" variant="outlined" />
                 <TextareaAutosize
                 onChange={e => setDescription(e.target.value)}
