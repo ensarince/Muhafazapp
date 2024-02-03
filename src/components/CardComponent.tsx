@@ -4,15 +4,13 @@ import { Esya } from '../types';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../features/userSlice';
 import { db } from '../firebase';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { QueryDocumentSnapshot, collection, deleteDoc, doc, onSnapshot, query, runTransaction } from 'firebase/firestore';
 import colors from "../assets/colors.module.scss"
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
 
 type Props = {
   item: Esya
 }
-
-
 
 export default function CardComponent({item}: Props) {
   
@@ -21,8 +19,7 @@ export default function CardComponent({item}: Props) {
   const handleClose = () => setOpen(false);
   const user = useSelector(selectUser);
   //const [collection, setCollection] = useState("")
-  const [likes, setLikes] = useState([])
-  const [hasLiked, setHasLiked] = useState(false)
+  const [likes, setLikes] = useState<any>([])
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -40,7 +37,6 @@ export default function CardComponent({item}: Props) {
     boxShadow: 24,
     p: 4,
   };
-
   
   //delete post func
   const handleDelete = async() => {
@@ -55,36 +51,55 @@ export default function CardComponent({item}: Props) {
         window.location.reload()
   }
 
-  //TODO: IMPLEMENT LIKING FUNCTIONALITY
-             //getting like data
-/*              useEffect(() => {
-              try {
-                const likes = onSnapshot(query(collection(db, 'items', id, 'likes')), 
-                snapshot => {
-                  setLikes(snapshot.docs)
-                });
-                return likes
-              } catch (error) {
-                console.log("Like fetching error --> ", error)
-              }
-            }, [db, id])     
+  const likePost = async (item_id: any) => {
+    const itemRef = doc(db, 'likes', item_id);
+
+    await runTransaction(db, async (transaction) => {
+      const itemDoc = await transaction.get(itemRef);
+
+      if (itemDoc.exists()) {
+        // The document exists, update it to add or remove the user email
+        let existingUsers = itemDoc.data().users || [];
+        const userEmail = user.email;
+
+        if (existingUsers.includes(userEmail)) {
+          // User has already liked the post, remove the like
+          existingUsers = existingUsers.filter((email: any) => email !== user.email);
+        } else {
+          // User hasn't liked the post, add the like
+          existingUsers.push(userEmail);
+        }
+
+        // Update the document with the modified users array
+        transaction.update(itemRef, { users: existingUsers });
+      } else {
+        // The document doesn't exist, create it with the new user email
+        transaction.set(itemRef, {
+          users: [user.email]
+        });
+      }
+    });
+};
+
+  //getting like data
+  useEffect(() => {
+    const unsubscribe = onSnapshot(query(collection(db, 'likes')), 
+      (snapshot: any) => {
+        let itemArray: any = [];
+        snapshot.forEach((item: QueryDocumentSnapshot) => {
+          const itemObject = {
+            id: item.id,
+            data: item.data()
+          };
+          itemArray.push(itemObject);
+        });
+      setLikes(itemArray);
+    });
   
-            //hasLiked info
-             useEffect(() => {
-              setHasLiked(likes.findIndex((like) => like.id === user.email) !== -1)
-            }, [likes])   
-  
-          //like adding functionality
-          const likePost = async() => {
-  
-            if(hasLiked){
-              await deleteDoc(doc(db, 'climbs', id, 'likes', user.email))
-            }else{
-              await setDoc(doc(db, 'climbs', id, 'likes', user.email), {
-                username: user.name 
-              })
-            }
-          } */
+    return () => {
+      unsubscribe();
+    };
+  }, [db, likePost]);   
   
   return (
     <div>
@@ -114,12 +129,18 @@ export default function CardComponent({item}: Props) {
                 Details              
               </Button>
                     <Box sx={{paddingLeft:"5rem", alignSelf:"center"}}>
-                      {hasLiked ? 
+                      {(likes.length !== 0 && likes.some((like: any) => like.id === item.id && like.data.users.includes(user.email))) ? 
                         (
-                          <Favorite sx={{}}/* onClick={likePost} */ />
+                          <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", gap:"0.25rem"}}>
+                            <Favorite sx={{color:"red"}} onClick={() => likePost(item.id)} />
+                            <span>{likes.filter((like: any) => like.id === item.id)[0]?.data.users.length.toString()}</span>
+                          </Box>
                         ) :
                         (
-                          <FavoriteBorder sx={{}}/* onClick={likePost} */ />
+                          <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", gap:"0.25rem"}}>
+                            <FavoriteBorder sx={{}} onClick={() => likePost(item.id)} />
+                            <span>{likes.filter((like: any) => like.id === item.id)[0]?.data.users.length.toString()}</span>
+                          </Box>
                         )}         
                     </Box>
             </CardActions>
