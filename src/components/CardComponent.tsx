@@ -128,7 +128,7 @@ export default function CardComponent({item}: Props) {
               <Button onClick={handleOpen} size="small" color="primary">
                 Details              
               </Button>
-                    <Box sx={{paddingLeft:"5rem", alignSelf:"center"}}>
+                    <Box sx={{paddingLeft:"1rem", alignSelf:"center"}}>
                       {(likes.length !== 0 && likes.some((like: any) => like.id === item.id && like.data.users.includes(user.email))) ? 
                         (
                           <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", gap:"0.25rem"}}>
