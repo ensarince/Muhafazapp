@@ -43,7 +43,7 @@ export default function MessagePage({ }: Props) {
             </Box>
           </Box>
           <Box sx={{display:"grid", gridTemplateColumns:"5rem 14rem", justifyContent:"center", alignItems:"center", width:{xs:"100%", sm:"100%", md:"50%", lg:"30%", xl:"30%"}, height:"7.5rem", color:"#fff", background:colors.secondary_blue_soft}}>
-            <img style={{borderRadius:"100%", width:"50px", height:"50px"}} src="https://media.licdn.com/dms/image/D5603AQHoizKyKrgIdg/profile-displayphoto-shrink_800_800/0/1698086293267?e=1710374400&v=beta&t=nLmC-gvLuqil3QaB202noQG8XA9RD6EOe_YTrFIZqBc" alt="" />
+            <img style={{borderRadius:"100%", width:"50px", height:"50px"}} src="https://media.licdn.com/dms/image/D5603AQFOh9fR8Y6_-A/profile-displayphoto-shrink_800_800/0/1706710766493?e=1712793600&v=beta&t=nETG06NZ3BfrWFhl5tSjjOSJ-PvZp2mM4Qxx6xsJ0IE" alt="" />
             <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"start"}}>
               <img style={{width:"2rem"}} src="https://i.etsystatic.com/34187105/r/il/42f625/4277147086/il_570xN.4277147086_3tfb.jpg" alt="" />
               <Typography sx={{fontWeight:"bold"}}>

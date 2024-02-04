@@ -157,30 +157,30 @@ return (
                 </Typography>
         </Box>
 
-        <Button 
-            variant='contained' 
-            color='inherit'  
-            sx={{
-                position:"absolute", 
-                right:"5%", 
-                bottom:"15%", 
-                borderRadius:"100%",
-                height:"5.5rem", 
-                minWidth:"5.5rem",
-                fontSize:"30px",
-                zIndex:"1000"
-            }} 
-            onClick={handleOpenModal}>+
-        </Button>
-
             <>
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg:16, xl: 20 }}>
+                <Button 
+                    variant='contained' 
+                    color='inherit'  
+                    sx={{
+                        position:"sticky", 
+                        top:"75%",
+                        left:"100%", 
+                        borderRadius:"100%",
+                        height:"5.5rem", 
+                        minWidth:"5.5rem",
+                        fontSize:"30px",
+                        zIndex:"1000"
+                    }} 
+                    onClick={handleOpenModal}>+
+                </Button>
+                <Grid container sx={{position:"relative", top:"-4rem"}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg:16, xl: 20 }}>
                 {handleSearchLost()?.map((item, index) => (
-                    <Grid item sx={{marginTop:"2rem"}} xs={2} sm={4} md={4} key={index}>
-                        <CardComponent /* setPostIdToBeDeleted={setPostIdToBeDeleted} handleDelete={handleDelete} */ item={item} />
+                    <Grid item xs={2} sm={4} md={4} key={index}>
+                        <CardComponent item={item} />
                     </Grid>
                 ))}
                 </Grid>
+
 
                 <Pagination 
                     style={{padding: 20,

@@ -3,6 +3,6 @@
 3.The ability to have a better way of adding location - 2 people
 4.Logging in immediately after signing up - 1 person
 5.Better way to differentiate their sale items (i.e. different color) - 1 person +++
-6.See how many people liked an item, viewed an item, etc - 1 person
+6.See how many people liked an item, viewed an item, etc - 1 person +++
 7.ability to interact with profiles (needs to be finished)
 8.ability to message users from item pages (needs to be finished)

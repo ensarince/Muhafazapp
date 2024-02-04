@@ -115,7 +115,7 @@ function App() {
 
       const [pageCount, setPageCount] = useState<number>(0)
   
-      //getting lost item data
+      //getting item data
       useEffect(() => {
         const unsubscribe = onSnapshot(query(collection(db, 'items'), orderBy('timestamp', 'desc')), 
         (snapshot: any) => {
