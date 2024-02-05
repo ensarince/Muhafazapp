@@ -132,13 +132,13 @@ export default function CardComponent({item}: Props) {
                       {(likes.length !== 0 && likes.some((like: any) => like.id === item.id && like.data.users.includes(user.email))) ? 
                         (
                           <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", gap:"0.25rem"}}>
-                            <Favorite sx={{color:"red"}} onClick={() => likePost(item.id)} />
+                            <Favorite sx={{color:"red", cursor:"pointer"}} onClick={() => likePost(item.id)} />
                             <span>{likes.filter((like: any) => like.id === item.id)[0]?.data.users.length.toString()}</span>
                           </Box>
                         ) :
                         (
                           <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", gap:"0.25rem"}}>
-                            <FavoriteBorder sx={{}} onClick={() => likePost(item.id)} />
+                            <FavoriteBorder sx={{cursor:"pointer"}} onClick={() => likePost(item.id)} />
                             <span>{likes.filter((like: any) => like.id === item.id)[0]?.data.users.length.toString()}</span>
                           </Box>
                         )}         
